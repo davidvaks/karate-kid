@@ -14,22 +14,29 @@ const SingleTaskClassNames = {
 }
 
 const addTask = () => {
+    // maybe add a helper that wraps document.querySelector(xxx) instead of writing it every time?
     const form = document.querySelector('#new_task_form');
+    // you are only using task_input in this function why not select it directly?
     const input =  form.task_input.value;
 
     if (input != '') {
+        // why is this line here and not inside "createTask" ?
+        // It's nicer to write .xxx > .yyy
+        // and better not select any element by tag-name - always have a class / id / attribute to select by
         const tableBody = document.querySelector('.incomplete_tasks>tbody');
         createTaskNewRow(tableBody, input);
         form.task_input.value = '';
     }
 };
 
+// not sure about the name "row" - it's abstract task creation - maybe it wont be a row in the future?
 const createTaskNewRow = (table, taskInput) => {
     const checkbox = createCheckbox();
     const taskText = createTaskTextElement(taskInput);
     const editButton = createEditButton();
     const deleteButton = createRemoveButton();
 
+    // can all this be in a generic helper that gets any number of table row children cells?
     const row = table.insertRow();
     row.insertCell(0).appendChild(checkbox);
     row.insertCell(1).appendChild(taskText);
@@ -38,8 +45,10 @@ const createTaskNewRow = (table, taskInput) => {
 };
 
 const itemCheckboxChange = (event) => {
+    // i'm not sure path is encouraged or standard, and even if it was, it's too fragile
+    // what if you changed the html? this would break. maybe use "Element.closest" ?
     const row = event.path[2];
-    const taskTextCell = row.cells[1];
+    const taskTextCell = row.cells[1]; // this is fragile too
     const taskTextElement = taskTextCell.querySelector(selectorFor(SingleTaskClassNames.TEXT));
     
     if (event.target.checked) {
@@ -54,15 +63,15 @@ const itemCheckboxChange = (event) => {
 };
 
 const removeItem = (event) => {
-    const row = event.path[2];
+    const row = event.path[2]; // dont use path
     row.remove();
 };
 
 const editItem = (event) => {
     const editButton = event.target;
-    const row = event.path[2];
-    const taskTextCell = row.cells[1];
-    const checkbox = row.cells[0].firstChild;
+    const row = event.path[2]; // no path
+    const taskTextCell = row.cells[1]; // fragile
+    const checkbox = row.cells[0].firstChild; // same
 
     if (isItemEditMode(editButton)) {
         exitEditModeAndUpdate(checkbox, taskTextCell, editButton);
@@ -97,13 +106,14 @@ const toggleEditButtonText = (editButton) => {
 };
 
 const isItemEditMode = (editButton) => {
+    // maybe there's a better way than checking the text - it's fragile and could change
     return editButton.value == ButtonTexts.SAVE;
 };
 
 const selectorFor = (className) => '.' + className;
 
 //     Elements Creation
-
+// how about a generic element creator helper that also sets props?
 const createTaskTextElement = (taskInput) => {
     const taskText = document.createElement('p');
     taskText.textContent = taskInput;
@@ -120,6 +130,7 @@ const createTaskEditInput = (taskText) => {
 };
 
 const createStrikeThroughElement = () => {
+    // why do you need strikethrough class if you're using del?
     const strikeThrough = document.createElement('del');
     strikeThrough.className = SingleTaskClassNames.STRIKE_THROUGH;
     return strikeThrough;
