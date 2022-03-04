@@ -9,7 +9,7 @@ body {
     transform: translate(-50%);
 }
 
-#task_input {
+.task_input {
     border: 1px solid #3899ec;
     padding: 7px 10px;
     margin: 8px 0;
@@ -26,7 +26,7 @@ body {
     height: 20px;
 }
 
-#add_task_button {
+.add_task_button {
     background-color: #ffffff;
     border: 1px solid #3899ec;
     color: #3899ec;
