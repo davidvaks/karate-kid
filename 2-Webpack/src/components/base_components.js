@@ -1,4 +1,4 @@
-import createElement from '../helpers.js';
+import { createElement } from '../helpers.js';
 import Constants from '../constants.js';
 
 export default function createBaseComponents() {
