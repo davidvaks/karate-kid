@@ -1,4 +1,4 @@
-import './style.css';
+import './css/style.css';
 import createBaseComponents from './components/base_components.js';
 import TaskElements from './components/task_components.js';
 import Constants from './constants.js';
