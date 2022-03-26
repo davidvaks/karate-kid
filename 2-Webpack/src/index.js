@@ -1,47 +1,54 @@
 import './style.css';
-import createBaseComponents from './base_components.js';
-import createElement from './helpers.js';
+import createBaseComponents from './components/base_components.js';
+import TaskElements from './components/task_components.js';
 import Constants from './constants.js';
 
-createBaseComponents();
+document.body.appendChild(createBaseComponents());
+
+const addTaskButton = document.querySelector(classSelectorFor(Constants.AddTaskClassNames.ADD_TASK_BUTTON))
+addTaskButton.addEventListener("click", (event) => addTask(event), false);
 
 function addTask() {
-    const input = document.querySelector('.task_input').value;
+    const taskInput = document.querySelector(classSelectorFor(Constants.AddTaskClassNames.TASK_INPUT));
 
-    if (input != '') {
-        createTask(input);
-        form.task_input.value = '';
+    if (taskInput.value != '') {
+        createTask(taskInput.value);
+        taskInput.value = '';
     }
 };
 
 function createTask(taskInput) {
-    const table = document.querySelector('.incomplete_tasks_body');
-    const checkbox = createCheckbox();
-    const taskText = createTaskTextElement(taskInput);
-    const editButton = createEditButton();
-    const deleteButton = createRemoveButton();
+    const table = document.querySelector(classSelectorFor(Constants.AddTaskClassNames.INCOMPLETE_TASKS_TABLE));
+    const checkbox = TaskElements.createCheckbox();
+    const taskText = TaskElements.createTaskTextElement(taskInput);
+    const editButton = TaskElements.createEditButton();
+    const removebutton = TaskElements.createRemoveButton();
+
+    checkbox.addEventListener("change", (event) => itemCheckboxChange(event), false);
+    editButton.addEventListener("click", (event) => editItem(event), false);
+    removebutton.addEventListener("click", (event) => removeItem(event), false);
 
     const row = table.insertRow();
     row.dataset.edit_mode = 'false';
     row.insertCell(0).appendChild(checkbox);
     row.insertCell(1).appendChild(taskText);
     row.insertCell(2).appendChild(editButton);
-    row.insertCell(3).appendChild(deleteButton);
+    row.insertCell(3).appendChild(removebutton);
 };
 
 function itemCheckboxChange(event) {
     const row = event.path[2];
     const taskTextCell = row.cells[1];
-    const taskTextElement = taskTextCell.querySelector(selectorFor(Constants.SingleTaskClassNames.TEXT));
-    const editButton = row.querySelector(selectorFor(Constants.SingleTaskClassNames.EDIT_BUTTON));
+    const taskTextElement = taskTextCell.querySelector(classSelectorFor(Constants.SingleTaskClassNames.TEXT));
+    const editButton = row.querySelector(classSelectorFor(Constants.SingleTaskClassNames.EDIT_BUTTON));
     
     if (event.target.checked) {
-        const strikeThrough = createStrikeThroughElement();
+        const strikeThrough = TaskElements.createStrikeThroughElement();
         taskTextCell.appendChild(strikeThrough);
         strikeThrough.appendChild(taskTextElement);
         editButton.style.display = 'none';
     } else {
-        const strikeThrough = taskTextCell.querySelector(selectorFor(Constants.SingleTaskClassNames.STRIKE_THROUGH));
+        const strikeThrough = taskTextCell.querySelector(classSelectorFor(Constants.SingleTaskClassNames.STRIKE_THROUGH));
         taskTextCell.appendChild(taskTextElement);
         strikeThrough.remove();
         editButton.style.display = 'inline-block';
@@ -67,9 +74,9 @@ function editItem(event) {
 };
 
 function enterItemEditMode(row, checkbox, taskTextCell, editButton) {
-    const taskTextElement = taskTextCell.querySelector(selectorFor(Constants.SingleTaskClassNames.TEXT));
+    const taskTextElement = taskTextCell.querySelector(classSelectorFor(Constants.SingleTaskClassNames.TEXT));
 
-    const editInput = createTaskEditInput(taskTextElement.textContent);
+    const editInput = TaskElements.createTaskEditInput(taskTextElement.textContent);
 
     taskTextCell.appendChild(editInput);
     taskTextElement.remove();
@@ -80,8 +87,8 @@ function enterItemEditMode(row, checkbox, taskTextCell, editButton) {
 };
 
 function exitEditModeAndUpdate(row, checkbox, taskTextCell, editButton) {
-    const newTaskInput = taskTextCell.querySelector(selectorFor(Constants.SingleTaskClassNames.EDIT_INPUT));
-    const newTaskText = createTaskTextElement(newTaskInput.value);
+    const newTaskInput = taskTextCell.querySelector(classSelectorFor(Constants.SingleTaskClassNames.EDIT_INPUT));
+    const newTaskText = TaskElements.createTaskTextElement(newTaskInput.value);
     taskTextCell.appendChild(newTaskText);
     newTaskInput.remove();
     toggleEditButtonText(editButton);
@@ -97,67 +104,6 @@ function isItemEditMode(row) {
     return row.dataset.edit_mode == 'true';
 };
 
-function selectorFor(className) { 
+function classSelectorFor(className) { 
     return '.' + className 
-};
-
-//     Elements Creation
-
-function createTaskTextElement(taskInput) {
-    return createElement( {
-        tag: 'p',
-        textContent: taskInput,
-        className: Constants.SingleTaskClassNames.TEXT,
-    });
-};
-
-function createTaskEditInput(taskText) {
-    return createElement( {
-        tag: 'input',
-        type: 'text',
-        className: Constants.SingleTaskClassNames.EDIT_INPUT,
-        value: taskText,
-    });
-};
-
-function createStrikeThroughElement() {
-    return createElement( {
-        tag: 'del',
-        className: Constants.SingleTaskClassNames.STRIKE_THROUGH,
-    });;
-};
-
-function createCheckbox() {
-    const checkbox = createElement( {
-        tag: 'input',
-        type: 'checkbox',
-        className: Constants.SingleTaskClassNames.CHECKBOX,
-    });
-
-    checkbox.addEventListener("change", (event) => itemCheckboxChange(event), false);
-    return checkbox;
-};
-
-function createEditButton() {
-    const editButton = createElement( {
-        tag: 'input',
-        type: 'button',
-        className: Constants.SingleTaskClassNames.EDIT_BUTTON,
-        value: Constants.ButtonTexts.EDIT,
-    });
-
-    editButton.addEventListener("click", (event) => editItem(event), false);
-    return editButton;
-};
-
-function createRemoveButton() {
-    const removebutton = createElement( {
-        tag: 'input',
-        type: 'button',
-        className: Constants.SingleTaskClassNames.REMOVE_BUTTON,
-        value: Constants.ButtonTexts.REMOVE,
-    });
-    
-    removebutton.addEventListener("click", (event) => removeItem(event), false);
-    return removebutton;
 };
