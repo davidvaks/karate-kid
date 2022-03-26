@@ -1,0 +1,92 @@
+body {
+    font-family: 'Helvetica Neue'
+}
+
+.container {
+    position: fixed;
+    left: 50%;
+    top: 80px;
+    transform: translate(-50%);
+}
+
+.task_input {
+    border: 1px solid #3899ec;
+    padding: 7px 10px;
+    margin: 8px 0;
+    border-radius: 30px;
+    width: 450px;
+}
+
+.task_edit_input {
+    border: 1px solid #3899ec;
+    padding: 7px 10px;
+    margin: 8px 0;
+    border-radius: 30px;
+    width: 300px;
+    height: 20px;
+}
+
+.add_task_button {
+    background-color: #ffffff;
+    border: 1px solid #3899ec;
+    color: #3899ec;
+    padding: 7px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.task_edit_button {
+    background-color: #ffffff;
+    border: 1px solid #3899ec;
+    color: #3899ec;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 30px;
+    height: 30px;
+    width: 80px;
+    cursor: pointer;
+}
+
+.task_remove_button {
+    background-color: #ffffff;
+    border: 1px solid #3899ec;
+    color: #3899ec;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 30px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+input[type=button]:hover {
+    background-color: #3899ec;
+    color: #ffffff;
+}
+
+input[type=button]:active {
+    background-color: #1b78c9;
+    color: #ffffff;
+}
+
+.task_checkbox {
+    outline: 2px solid #3899ec;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.incomplete_tasks tbody tr td:nth-child(2) {
+    width: 400px;
+    word-break: break-all;
+  }
